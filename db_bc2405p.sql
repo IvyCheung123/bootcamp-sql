@@ -448,5 +448,43 @@ select 1 from orders;
 
 -- join -> *, union -> +
 
+select * from orders;
+
+-- view
+-- select the actual at that moment, not the moment create view -> real time data (i.e. actual real time orders table data)
+-- Data security, group of access: only select data without personal identifies for view
+-- 冇減輕db負擔, 都係access同一個db, 只係節省developer寫呢條code嘅時間
+create view orders_202408
+as
+select * -- 儘量唔好select * (slower performance & 有機會搬落其他地方 e.g. 做PROCEDURE, 因為*果個table可以再add column, 萬一搬落fixed length -> 會爆)
+from orders
+where tran_date between date_format('2024-08-01', '%Y-%m-%d') and date_format('2024-08-31', '%Y-%m-%d');
+
+select * from orders_202408;
+
+-- PL/SQL in Oracle, PROCEDURE (IF ELSE, FOR LOOP, CURSOR, SQL)
+-- Stored Procedure (old thing) -> 填完form -> store in DB -> 等到夜晚先行
+-- 同一個server, 同一個db, 唔會有network問題
+-- java同sql要有framework去溝通, procedure可以直接寫sql
+
+-- P_ID INT;
+-- P_TOTAL_AMOUNT NUMERIC(13,2);
+-- P_CUSTOMER_ID INT;
+-- P_TRAN_DATE DATE;
+
+-- CURSOR C_ORDERS
+-- IS 
+-- select ID, TOTAL_AMOUNT, CUSTOMER_ID, TRAN_DATE
+-- from oorders_202408;
+
+-- FOR rec IN C_ORDERS LOOP
+-- -- P_ID, P_TOTAL_AMOUNT, P_CUSTOMER_ID, P_TRAN_DATE
+-- 	IF () THEN
+-- 	ELSE
+--     END IF;
+--     -- send sms
+--     -- send email
+-- END LOOP;
+
 
 
